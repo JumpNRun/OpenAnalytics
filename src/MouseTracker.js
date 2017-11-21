@@ -1,3 +1,4 @@
-import EventTracker from "EventTracker";
+import EventTracker from "./EventTracker";
 
 console.log(EventTracker);
+console.log("MouseTracker");
