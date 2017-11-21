@@ -1,21 +1,22 @@
-const path = require('path');
+const path = require("path");
 
 module.exports = {
-	entry: './src/analytics.js',
+	entry: "./src/analytics.js",
 	output: {
-		filename: 'bundle.js',
-		path: path.resolve(__dirname, 'dist')
+		filename: "bundle.js",
+		path: path.resolve(__dirname, "dist")
 	},
 	module: {
 		loaders: [
 			{
-				test: /\.js?/, 
+				test: /\.js?/,
 				loader: "babel-loader",
 				exclude: /node_modules/,
 				query: {
-					presets: ['env']
+					presets: ["env"]
 				}
 			}
 		]
-	}
+	},
+	devtool: "source-map"
 };

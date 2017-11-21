@@ -11,8 +11,7 @@
     "webpack": "^3.8.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+	"build": "webpack"
   },
   "repository": {
     "type": "git",
