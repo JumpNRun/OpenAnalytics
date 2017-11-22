@@ -8,7 +8,10 @@ export default class MouseTracker {
 			"click",
 			"mousedown",
 			"mousemove",
-			"mouseup"
+			"mouseup",
+			"dragstart",
+			"dragover",
+			"dragend"
 		];
 
 		aTrackedMouseEvents.forEach((sEventName) => {
@@ -43,24 +46,33 @@ export default class MouseTracker {
 				case "click":
 					ctx.fillStyle = "rgba(255, 165, 0, 0.2)";
 					ctx.beginPath();
-					ctx.arc(mEventInfo.x, mEventInfo.y, 10, 0, 2 * Math.PI);
+					ctx.arc(mEventInfo.x, mEventInfo.y, 15, 0, 2 * Math.PI);
 					ctx.fill();
 					ctx.stroke();
+					ctx.fillStyle = "#000";
 					break;
 				case "mousedown":
+				case "dragstart":
 					bDragging = true;
 					ctx.strokeStyle = "blue";
+					ctx.lineWidth = 5;
+					ctx.setLineDash([5, 3]);
 					ctx.beginPath();
 					ctx.moveTo(mEventInfo.x, mEventInfo.y);
 					break;
 				case "mousemove":
+				case "dragover":
 					if (bDragging) {
 						ctx.lineTo(mEventInfo.x, mEventInfo.y);
 					}
 					break;
 				case "mouseup":
+				case "dragend":
 					bDragging = false;
 					ctx.stroke();
+					ctx.strokeStyle = "#000";
+					ctx.lineWidth = 1;
+					ctx.setLineDash([]);
 					break;
 				default:
 			}
