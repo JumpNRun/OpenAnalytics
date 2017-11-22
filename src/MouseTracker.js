@@ -17,12 +17,19 @@ export default class MouseTracker {
 
 		aTrackedMouseEvents.forEach((sEventName) => {
 			document.addEventListener(sEventName, (oEvent) => {
-				this.aEvents.push({
+				let mEventInfo = {
 					name: oEvent.type,
 					time: Date.now(),
 					x: oEvent.clientX,
 					y: oEvent.clientY
-				});
+				};
+
+				let oControl = jQuery(oEvent.target).control(0);
+				if (oControl) {
+					mEventInfo.control = oControl.getMetadata().getName();
+				}
+
+				this.aEvents.push(mEventInfo);
 				window.localStorage.clickEvents = JSON.stringify(this.aEvents);
 			});
 		})
