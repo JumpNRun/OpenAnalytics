@@ -1,0 +1,1 @@
+javascript:(function(){var script = document.createElement('script');script.src = 'http://localhost:63342/OpenAnalytics/dist/bundle.js';document.body.appendChild(script);})();
