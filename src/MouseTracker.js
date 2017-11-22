@@ -18,14 +18,15 @@ export default class MouseTracker {
 			document.addEventListener(sEventName, (oEvent) => {
 				let mEventInfo = {
 					name: oEvent.type,
-					time: Date.now(),
+					time: new Date(Date.now()),
 					x: oEvent.clientX,
 					y: oEvent.clientY
 				};
 
 				let oControl = jQuery(oEvent.target).control(0);
-				if (oControl) {
+				if (oControl && oEvent.type === "click") {
 					mEventInfo.control = oControl.getMetadata().getName();
+					mEventInfo.controlId = oControl.getId();
 				}
 
 				this.aEvents.push(mEventInfo);
