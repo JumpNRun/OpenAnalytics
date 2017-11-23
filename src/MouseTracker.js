@@ -19,12 +19,14 @@ export default class MouseTracker extends TrackerBase {
 					time: new Date(Date.now()),
 					x: oEvent.clientX,
 					y: oEvent.clientY
-				};d
+				};
 
-				let oControl = jQuery(oEvent.target).control(0);
-				if (oControl && oEvent.type === "click") {
-					mEventInfo.control = oControl.getMetadata().getName();
-					mEventInfo.controlId = oControl.getId();
+				if (oEvent.type === "click") {
+					let oControl = jQuery && jQuery(oEvent.target).control(0);
+					if (oControl) {
+						mEventInfo.control = oControl.getMetadata().getName();
+						mEventInfo.controlId = oControl.getId();
+					}
 				}
 
 				this.aData.push(mEventInfo);

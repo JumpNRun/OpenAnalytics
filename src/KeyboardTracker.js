@@ -3,8 +3,6 @@ import TrackerBase from "./TrackerBase";
 export default class KeyboardTracker extends TrackerBase {
 	start() {
 		const aTrackedEvents = [
-			"keydown",
-			"keyup",
 			"keypress"
 		];
 
@@ -15,9 +13,11 @@ export default class KeyboardTracker extends TrackerBase {
 					time: Date.now()
 				};
 
-				let oControl = jQuery(oEvent.target).control(0);
-				if (oControl) {
+				let bIsPasswordInput = oEvent.target instanceof HTMLInputElement && oEvent.target.type === "password";
+				let oControl = jQuery && jQuery(oEvent.target).control(0);
+				if (!bIsPasswordInput && oControl) {
 					mEventInfo.control = oControl.getMetadata().getName();
+					mEventInfo.controlId = oControl.getId();
 
 					this.aData.push(mEventInfo);
 					window.localStorage.keyboard = JSON.stringify(this.aData);
