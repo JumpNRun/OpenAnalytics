@@ -3,6 +3,9 @@ import KeyboardTracker from "./KeyboardTracker";
 
 class Analytics {
 	constructor() {
+		this.oDialog = null;
+		this.oMouseTable = null;
+		this.oKeyboardTable = null;
 		this.aTrackers = [
 			new MouseTracker(),
 			new KeyboardTracker()
@@ -15,12 +18,22 @@ class Analytics {
 		}
 	}
 
-	paintData() {
+	stop() {
+		for (let i = 0; i < this.aTrackers.length; i++) {
+			this.aTrackers[i].stop();
+		}
+	}
+
+	showInteraction() {
 		let oCanvas = this.createCanvas();
 
 		for (let i = 0; i < this.aTrackers.length; i++) {
 			this.aTrackers[i].paintData(oCanvas);
 		}
+	}
+
+	hideInteraction() {
+		this.removeCanvas();
 	}
 
 	createCanvas() {
@@ -43,8 +56,133 @@ class Analytics {
 		return oCanvas;
 	}
 
-	static removeCanvas() {
+	removeCanvas() {
 		document.body.removeChild(document.getElementById("analytics-data-presentation"));
+	}
+
+	openDashboard() {
+		if (!sap) {
+			console.log("ui5 not yet loaded, try again later!");
+			return;
+		}
+
+		if (!this.oDialog) {
+			sap.ui.getCore().loadLibrary("sap.ui.table");
+
+			this.oMouseTable = new sap.ui.table.Table("mouseTable", {
+				title: "Mouse Interaction",
+				alternateRowColors: true,
+				visibleRowCountMode: "Auto",
+				rows: {
+					path: "/"
+				},
+				columns: [
+					new sap.ui.table.Column({
+						label: new sap.m.Label({text: "Event name"}),
+						template: new sap.m.Text({text: "{name}", wrapping: false}),
+						sortProperty: "name",
+						filterProperty: "name"
+					}),
+					new sap.ui.table.Column({
+						label: "Event executed at",
+						template: new sap.m.Text({text: "{time}", wrapping: false}),
+						sortProperty: "time"
+					}),
+					new sap.ui.table.Column({
+						label: "X position",
+						template: new sap.m.Text({text: "{x}", wrapping: false})
+					}),
+					new sap.ui.table.Column({
+						label: "Y position",
+						template: new sap.m.Text({text: "{y}", wrapping: false})
+					}),
+					new sap.ui.table.Column({
+						label: "Control Name",
+						template: new sap.m.Text({text: "{control}", wrapping: false}),
+						filterProperty: "control"
+					}),
+					new sap.ui.table.Column({
+						label: "Control ID",
+						template: new sap.m.Text({text: "{controlId}", wrapping: false})
+					})
+				]
+			});
+
+			this.oKeyboardTable = new sap.ui.table.Table("keyboardTable", {
+				title: "Keyboard Interaction",
+				alternateRowColors: true,
+				visibleRowCountMode: "Auto",
+				rows: {
+					path: "/"
+				},
+				columns: [
+					new sap.ui.table.Column({
+						label: new sap.m.Label({text: "Event name"}),
+						template: new sap.m.Text({text: "{name}", wrapping: false}),
+						sortProperty: "name",
+						filterProperty: "name"
+					}),
+					new sap.ui.table.Column({
+						label: "Event executed at",
+						template: new sap.m.Text({text: "{time}", wrapping: false}),
+						sortProperty: "time"
+					}),
+					new sap.ui.table.Column({
+						label: "Key",
+						template: new sap.m.Text({text: {
+							path: "charCode",
+							formatter: function(sCharCode) {
+								return String.fromCharCode(sCharCode);
+							}
+						}, wrapping: false})
+					}),
+					new sap.ui.table.Column({
+						label: "Character Code",
+						template: new sap.m.Text({text: "{charCode}", wrapping: false})
+					}),
+					new sap.ui.table.Column({
+						label: "Control Name",
+						template: new sap.m.Text({text: "{control}", wrapping: false}),
+						filterProperty: "control"
+					}),
+					new sap.ui.table.Column({
+						label: "Control ID",
+						template: new sap.m.Text({text: "{controlId}", wrapping: false})
+					})
+				]
+			});
+
+			this.oDialog = new sap.m.Dialog({
+				title: "Analytics Report",
+				contentWidth: "100%",
+				contentHeight: "100%",
+				content: [this.oMouseTable, this.oKeyboardTable]
+			});
+		}
+
+		let sMouseData = window.localStorage.mouse;
+		if (sMouseData) {
+			let aMouseData = JSON.parse(sMouseData);
+			let oModel = new sap.ui.model.json.JSONModel(aMouseData);
+			this.oMouseTable.setModel(oModel);
+		}
+
+		let sKeyboardData = window.localStorage.keyboard;
+		if (sKeyboardData) {
+			let aKeyboardData = JSON.parse(sKeyboardData);
+			let oModel = new sap.ui.model.json.JSONModel(aKeyboardData);
+			this.oKeyboardTable.setModel(oModel);
+		}
+
+		this.stop();
+		this.oDialog.open();
+	}
+
+	closeDashboard() {
+		if (this.oDialog) {
+			this.oDialog.close();
+			this.start();
+		}
 	}
 }
 
