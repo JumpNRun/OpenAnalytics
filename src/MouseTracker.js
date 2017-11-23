@@ -1,10 +1,8 @@
-export default class MouseTracker {
-	constructor() {
-		this.aEvents = [];
-	}
+import TrackerBase from "./TrackerBase";
 
+export default class MouseTracker extends TrackerBase {
 	start() {
-		const aTrackedMouseEvents = [
+		const aTrackedEvents = [
 			"click",
 			"mousedown",
 			"mousemove",
@@ -14,33 +12,36 @@ export default class MouseTracker {
 			"dragend"
 		];
 
-		aTrackedMouseEvents.forEach((sEventName) => {
+		aTrackedEvents.forEach((sEventName) => {
 			document.addEventListener(sEventName, (oEvent) => {
 				let mEventInfo = {
 					name: oEvent.type,
 					time: Date.now(),
 					x: oEvent.clientX,
 					y: oEvent.clientY
-				};
+				};d
 
 				let oControl = jQuery(oEvent.target).control(0);
 				if (oControl) {
 					mEventInfo.control = oControl.getMetadata().getName();
 				}
 
-				this.aEvents.push(mEventInfo);
-				window.localStorage.clickEvents = JSON.stringify(this.aEvents);
+				this.aData.push(mEventInfo);
+				window.localStorage.mouse = JSON.stringify(this.aData);
 			});
 		})
 	}
 
-	paintData() {
-		let oCanvas = this.createCanvas();
+	paintData(oCanvas) {
+		if (!oCanvas) {
+			return;
+		}
+
 		let ctx = oCanvas.getContext("2d");
 		let bDragging = false;
 
-		for (let i = 0; i < this.aEvents.length; i++) {
-			let mEventInfo = this.aEvents[i];
+		for (let i = 0; i < this.aData.length; i++) {
+			let mEventInfo = this.aData[i];
 
 			switch (mEventInfo.name) {
 				case "click":
@@ -77,29 +78,5 @@ export default class MouseTracker {
 				default:
 			}
 		}
-	}
-
-	createCanvas() {
-		if (document.getElementById("analytics-data-presentation")) {
-			this.removeCanvas();
-		}
-
-		let oCanvas = document.createElement("canvas");
-		let mBodyRect = document.body.getBoundingClientRect();
-
-		oCanvas.setAttribute("id", "analytics-data-presentation");
-		oCanvas.setAttribute("width", mBodyRect.width + "px");
-		oCanvas.setAttribute("height", mBodyRect.height + "px");
-		oCanvas.style.position = "absolute";
-		oCanvas.style.top = 0;
-		oCanvas.style.left = 0;
-		oCanvas.style.backgroundColor = "transparent";
-		document.body.appendChild(oCanvas);
-
-		return oCanvas;
-	}
-
-	removeCanvas() {
-		document.body.removeChild(document.getElementById("analytics-data-presentation"));
 	}
 }
