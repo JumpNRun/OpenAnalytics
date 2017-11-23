@@ -95,4 +95,9 @@ export default class MouseTracker extends TrackerBase {
 			}
 		}
 	}
+
+	clearData() {
+		super.clearData();
+		window.localStorage.removeItem("mouse");
+	}
 }

@@ -13,4 +13,8 @@ export default class TrackerBase {
 	}
 
 	paintData(oCanvas) {}
+
+	clearData() {
+		this.aData = [];
+	}
 }

@@ -3,9 +3,9 @@ import TrackerBase from "./TrackerBase";
 export default class KeyboardTracker extends TrackerBase {
 	constructor() {
 		super();
-		let sMouseData = window.localStorage.mouse;
-		if (sMouseData) {
-			this.aData = JSON.parse(sMouseData);
+		let sKeyboardData = window.localStorage.keyboard;
+		if (sKeyboardData) {
+			this.aData = JSON.parse(sKeyboardData);
 		}
 	}
 
@@ -38,5 +38,10 @@ export default class KeyboardTracker extends TrackerBase {
 			document.addEventListener(oListener.name, oListener.listener);
 			this.aEventListeners.push(oListener);
 		});
+	}
+
+	clearData() {
+		super.clearData();
+		window.localStorage.removeItem("keyboard");
 	}
 }

@@ -165,6 +165,8 @@ class Analytics {
 			let aMouseData = JSON.parse(sMouseData);
 			let oModel = new sap.ui.model.json.JSONModel(aMouseData);
 			this.oMouseTable.setModel(oModel);
+		} else {
+			this.oMouseTable.setModel(new sap.ui.model.json.JSONModel());
 		}
 
 		let sKeyboardData = window.localStorage.keyboard;
@@ -172,6 +174,8 @@ class Analytics {
 			let aKeyboardData = JSON.parse(sKeyboardData);
 			let oModel = new sap.ui.model.json.JSONModel(aKeyboardData);
 			this.oKeyboardTable.setModel(oModel);
+		} else {
+			this.oKeyboardTable.setModel(new sap.ui.model.json.JSONModel());
 		}
 
 		this.stop();
@@ -182,6 +186,12 @@ class Analytics {
 		if (this.oDialog) {
 			this.oDialog.close();
 			this.start();
+		}
+	}
+
+	clearData() {
+		for (let i = 0; i < this.aTrackers.length; i++) {
+			this.aTrackers[i].clearData();
 		}
 	}
 }
