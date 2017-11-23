@@ -152,11 +152,29 @@ class Analytics {
 				]
 			});
 
+			let oVBox = new sap.m.VBox({
+				height: "100%",
+				width: "100%",
+				items: [
+					new sap.m.VBox({
+						height: "50%",
+						width: "auto",
+						items: [this.oMouseTable]
+					}).addStyleClass("sapUiResponsiveContentPadding"),
+					new sap.m.VBox({
+						height: "50%",
+						width: "auto",
+						items: [this.oKeyboardTable]
+					}).addStyleClass("sapUiResponsiveContentPadding")
+				]
+			}).addStyleClass("sapUiResponsiveContentPadding");
+
 			this.oDialog = new sap.m.Dialog({
 				title: "Analytics Report",
 				contentWidth: "100%",
 				contentHeight: "100%",
-				content: [this.oMouseTable, this.oKeyboardTable]
+				horizontalScrolling: false,
+				content: [oVBox]
 			});
 		}
 
