@@ -170,6 +170,7 @@ class Analytics {
 			this.oDialog = new sap.m.Dialog({
 				title: "Analytics Report",
 				contentWidth: "100%",
+				contentHeight: "100%",
 				horizontalScrolling: false,
 				content: [oVBox]
 			});
