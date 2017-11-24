@@ -72,7 +72,6 @@ class Analytics {
 			this.oMouseTable = new sap.ui.table.Table("mouseTable", {
 				title: "Mouse Interaction",
 				alternateRowColors: true,
-				visibleRowCountMode: "Auto",
 				rows: {
 					path: "/"
 				},
@@ -111,7 +110,6 @@ class Analytics {
 			this.oKeyboardTable = new sap.ui.table.Table("keyboardTable", {
 				title: "Keyboard Interaction",
 				alternateRowColors: true,
-				visibleRowCountMode: "Auto",
 				rows: {
 					path: "/"
 				},
@@ -172,7 +170,6 @@ class Analytics {
 			this.oDialog = new sap.m.Dialog({
 				title: "Analytics Report",
 				contentWidth: "100%",
-				contentHeight: "100%",
 				horizontalScrolling: false,
 				content: [oVBox]
 			});

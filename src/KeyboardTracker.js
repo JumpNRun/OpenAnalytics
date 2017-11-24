@@ -24,7 +24,7 @@ export default class KeyboardTracker extends TrackerBase {
 					if (!bIsPasswordInput && oControl) {
 						let mEventInfo = {
 							name: oEvent.type,
-							time: Date.now(),
+							time: new Date(Date.now()),
 							charCode: oEvent.charCode,
 							control: oControl.getMetadata().getName(),
 							controlId: oControl.getId()
